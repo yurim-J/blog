@@ -51,7 +51,7 @@
   
       ,"page1": {
           "title": "About Me",
-          "content": "This website is powered by fastpages 1. . a blogging platform that natively supports Jupyter notebooks in addition to other formats. &#8617; . |",
+          "content": "yurim-J입니다. . 현재 python 공부 중……. | . 사용 가능한 기술 . 파이썬 | Numpy, Pandas를 이용한 데이터 분석 | 파이썬 기반 시각화 | 파이썬 기반 머신러닝 | . Project . 멜론 음악 크롤링 Ver.01 | .",
           "url": "https://yurim-j.github.io/blog/about/",
           "relUrl": "/about/",
           "date": ""
