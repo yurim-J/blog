@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>2022년도 대학 도서관 책 구입비 예측 | Data Analysis</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="2022년도 대학 도서관 책 구입비 예측" />
+<meta name="author" content="yurim j" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="출판시장 예측 프로젝트" />
+<meta property="og:description" content="출판시장 예측 프로젝트" />
+<link rel="canonical" href="https://yurim-j.github.io/blog/%ED%9A%8C%EA%B7%80%EB%B6%84%EC%84%9D/python/2021/12/08/2022%EB%85%84%EB%8F%84-%EB%8C%80%ED%95%99-%EB%8F%84%EC%84%9C%EA%B4%80-%EC%B1%85-%EA%B5%AC%EC%9E%85%EB%B9%84-%EC%98%88%EC%B8%A1.html" />
+<meta property="og:url" content="https://yurim-j.github.io/blog/%ED%9A%8C%EA%B7%80%EB%B6%84%EC%84%9D/python/2021/12/08/2022%EB%85%84%EB%8F%84-%EB%8C%80%ED%95%99-%EB%8F%84%EC%84%9C%EA%B4%80-%EC%B1%85-%EA%B5%AC%EC%9E%85%EB%B9%84-%EC%98%88%EC%B8%A1.html" />
+<meta property="og:site_name" content="Data Analysis" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-12-08T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="2022년도 대학 도서관 책 구입비 예측" />
+<script type="application/ld+json">
+{"url":"https://yurim-j.github.io/blog/%ED%9A%8C%EA%B7%80%EB%B6%84%EC%84%9D/python/2021/12/08/2022%EB%85%84%EB%8F%84-%EB%8C%80%ED%95%99-%EB%8F%84%EC%84%9C%EA%B4%80-%EC%B1%85-%EA%B5%AC%EC%9E%85%EB%B9%84-%EC%98%88%EC%B8%A1.html","@type":"BlogPosting","headline":"2022년도 대학 도서관 책 구입비 예측","dateModified":"2021-12-08T00:00:00-06:00","datePublished":"2021-12-08T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://yurim-j.github.io/blog/%ED%9A%8C%EA%B7%80%EB%B6%84%EC%84%9D/python/2021/12/08/2022%EB%85%84%EB%8F%84-%EB%8C%80%ED%95%99-%EB%8F%84%EC%84%9C%EA%B4%80-%EC%B1%85-%EA%B5%AC%EC%9E%85%EB%B9%84-%EC%98%88%EC%B8%A1.html"},"author":{"@type":"Person","name":"yurim j"},"description":"출판시장 예측 프로젝트","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://yurim-j.github.io/blog/feed.xml" title="Data Analysis" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Data Analysis</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/contact/">Contact</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">2022년도 대학 도서관 책 구입비 예측</h1><p class="page-description">출판시장 예측 프로젝트</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-12-08T00:00:00-06:00" itemprop="datePublished">
+        Dec 8, 2021
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">yurim j</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      2 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#회귀분석">회귀분석</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#Python">Python</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-justify-center">
+          <div class="px-2">
+
+    <a href="https://github.com/yurim-J/blog/tree/master/_notebooks/2021-12-08-2022년도 대학 도서관 책 구입비 예측.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/yurim-J/blog/master?filepath=_notebooks%2F2021-12-08-2022%EB%85%84%EB%8F%84+%EB%8C%80%ED%95%99+%EB%8F%84%EC%84%9C%EA%B4%80+%EC%B1%85+%EA%B5%AC%EC%9E%85%EB%B9%84+%EC%98%88%EC%B8%A1.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/yurim-J/blog/blob/master/_notebooks/2021-12-08-2022년도 대학 도서관 책 구입비 예측.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2021-12-08-2022년도 대학 도서관 책 구입비 예측.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.family'</span><span class="p">]</span><span class="o">=</span><span class="s1">'Malgun Gothic'</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.size'</span><span class="p">]</span><span class="o">=</span><span class="mi">15</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">'대학도서관현황_20211125161551.csv'</span><span class="p">,</span><span class="n">delimiter</span><span class="o">=</span><span class="s1">','</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span><span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([['"대학도서관 현황(개)"', '전체', '426', '434', '457', '458', '462', '461',
+        '453', '460', '459'],
+       ['"대학도서관 현황(개)"', '대학', '210', '214', '219', '221', '220', '220',
+        '219', '219', '-'],
+       ['"대학도서관 현황(개)"', '전문대학', '144', '145', '138', '144', '138',
+        '137', '137', '138', '-'],
+       ['"대학도서관 현황(개)"', '대학원대학', '33', '35', '41', '42', '44', '43',
+        '43', '44', '-'],
+       ['"대학도서관 현황(개)"', '기타', '39', '40', '59', '51', '60', '61', '54',
+        '59', '-'],
+       ['"1관당 장서 수(권)"', '장서 수(A)', '123877839', '127306082',
+        '138303474', '142304154', '154689638', '160597929', '165630256',
+        '170151189', '-'],
+       ['"1관당 장서 수(권)"', '대학도서관 수(B)', '426', '434', '457', '458', '462',
+        '461', '453', '460', '-'],
+       ['"1관당 장서 수(권)"', '1관당 장서 수(A/B)', '290793', '293332', '302633',
+        '310708', '334826', '348369', '365630', '369894', '-'],
+       ['"1관당 사서 수(명)"', '정규 사서 수(A)', '2121', '2188', '2028', '1959',
+        '1905', '1860', '1836', '1789', '-'],
+       ['"1관당 사서 수(명)"', '대학도서관 수(B)', '426', '434', '457', '458', '462',
+        '461', '453', '460', '-'],
+       ['"1관당 사서 수(명)"', '1관당 정규 사서 수(A/B)', '5', '5', '4.4', '4.3',
+        '4.1', '4', '4.1', '4', '-'],
+       ['"1관당 대출도서 수(권)"', '대출도서 수(A)', '27988816', '24456035',
+        '18092907', '16987797', '19086410', '17334589', '16227493',
+        '15927933', '-'],
+       ['"1관당 대출도서 수(권)"', '대학도서관 수(B)', '426', '434', '456', '458',
+        '462', '461', '453', '460', '-'],
+       ['"1관당 대출도서 수(권)"', '1관당 대출도서 수(A/B)', '65701', '56350', '39591',
+        '37091', '41313', '37602', '35822', '34626', '-'],
+       ['"1관당 도서구입비(원)"', '도서구입비(A)', '80756351021', '80885127897',
+        '63576091748', '60017128255', '61495377145', '60660190272',
+        '58776001241', '57812785027', '-'],
+       ['"1관당 도서구입비(원)"', '대학도서관 수(B)', '426', '434', '456', '458',
+        '462', '461', '453', '460', '-'],
+       ['"1관당 도서구입비(원)"', '1관당 도서구입비(A/B)', '189569322', '186371262',
+        '139116175', '131041765', '133106877', '131583927', '129748347',
+        '125679967', '-']], dtype=object)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">전체도서구입비</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">전체도서구입비</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([['80756351021'],
+       ['80885127897'],
+       ['63576091748'],
+       ['60017128255'],
+       ['61495377145'],
+       ['60660190272'],
+       ['58776001241'],
+       ['57812785027']], dtype=object)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">연도</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2010</span><span class="p">,</span><span class="mi">2011</span><span class="p">,</span><span class="mi">2013</span><span class="p">,</span><span class="mi">2014</span><span class="p">,</span><span class="mi">2015</span><span class="p">,</span><span class="mi">2016</span><span class="p">,</span><span class="mi">2017</span><span class="p">,</span><span class="mi">2018</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">연도</span><span class="p">,</span><span class="n">전체도서구입비</span><span class="p">)</span>
+<span class="n">r_square</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">연도</span><span class="p">,</span><span class="n">전체도서구입비</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'R square:'</span><span class="p">,</span><span class="n">r_square</span><span class="p">)</span>
+<span class="n">X_temp</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2022</span><span class="p">]]</span> 
+
+<span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_temp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'2022년도 대학도서관 예측 책 구입비:'</span><span class="p">,</span><span class="n">y_hat</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>R square: 0.8034825786465837
+2022년도 대학도서관 예측 책 구입비: [[4.17786475e+10]]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">연도</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">연도</span><span class="p">,</span><span class="mi">2022</span><span class="p">)</span>
+<span class="n">연도</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([2010, 2011, 2013, 2014, 2015, 2016, 2017, 2018, 2022])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="n">연도</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'int64'</span><span class="p">)</span>
+<span class="n">x</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([2010, 2011, 2013, 2014, 2015, 2016, 2017, 2018, 2022], dtype=int64)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">전체도서구입비</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">전체도서구입비</span><span class="p">,</span><span class="mf">4.17786475e+10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span><span class="o">=</span><span class="n">전체도서구입비</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'int64'</span><span class="p">)</span>
+<span class="n">y</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([80756351021, 80885127897, 63576091748, 60017128255, 61495377145,
+       60660190272, 58776001241, 57812785027, 41778647500], dtype=int64)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.family'</span><span class="p">]</span><span class="o">=</span><span class="s1">'Malgun Gothic'</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.size'</span><span class="p">]</span><span class="o">=</span><span class="mi">15</span> 
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'대학 도서관 전체 서적 구입비'</span><span class="p">,</span><span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">'family'</span><span class="p">:</span><span class="s1">'Malgun Gothic'</span><span class="p">,</span><span class="s1">'size'</span><span class="p">:</span><span class="mi">15</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'연도'</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="s1">'right'</span><span class="p">)</span> <span class="c1">#left,right,center</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'구입비'</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="s1">'top'</span><span class="p">)</span> <span class="c1">#top,middle,bottom</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Text(0, 1, '구입비')</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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%0A">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="yurim-J/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/%ED%9A%8C%EA%B7%80%EB%B6%84%EC%84%9D/python/2021/12/08/2022%EB%85%84%EB%8F%84-%EB%8C%80%ED%95%99-%EB%8F%84%EC%84%9C%EA%B4%80-%EC%B1%85-%EA%B5%AC%EC%9E%85%EB%B9%84-%EC%98%88%EC%B8%A1.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
